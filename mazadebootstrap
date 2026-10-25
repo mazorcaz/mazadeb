@@ -16,6 +16,7 @@ PACKAGES=(
 	dbus
 	vim-tiny
 	ed
+	locales
 )
 
 # for user environments
@@ -219,6 +220,12 @@ AddressRandomization=network
 AddressRandomizationRange=full
 EOF
 
+echo "[INFO] Disabling TTY bell..."
+
+mkdir -p "$TARGET_DIR/etc/modprobe.d"
+echo "blacklist pcspkr" > "$TARGET_DIR/etc/modprobe.d/nobeep.conf"
+echo "set bell-style none" >> "$TARGET_DIR/etc/inputrc"
+
 echo "[INFO] Copying mazadebootstrap to /usr/local/bin..."
 
 mkdir -p "$TARGET_DIR/usr/local/bin"
@@ -241,8 +248,12 @@ cp -L /etc/resolv.conf "$TARGET_DIR/etc"
 echo "[INFO] Chrooting..."
 chroot "$TARGET_DIR" /bin/bash <<EOF
 export DEBIAN_FRONTEND=noninteractive
-echo "root:password" | /usr/sbin/chpasswd
-chage -d 0 root
+
+# configure locales
+echo "[INFO] Configuring locales..."
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+locale-gen
+update-locale LANG=en_US.UTF-8
 
 # install things
 echo "[INFO] Installing kernel, firmware, and bootloader..."
@@ -268,6 +279,8 @@ update-grub
 # configure system
 echo "[INFO] Configuring system..."
 systemctl enable systemd-networkd systemd-resolved iwd
+echo "root:password" | /usr/sbin/chpasswd
+chage -d 0 root
 EOF
 
 echo "[INFO] Exited chroot"
