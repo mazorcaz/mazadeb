@@ -2,20 +2,39 @@
 # mazadebootstrap
 VERSION=1.0
 
-# packages to be installed
-PACKAGES=(systemd-sysv
+# essential packages
+PACKAGES=(
+	systemd-sysv
 	e2fsprogs
 	iproute2
 	iputils-ping
-	curl
-	vim-tiny
-	ed
 	sudo
 	systemd-resolved
 	iwd
 	debootstrap
 	ssh
 	dbus
+	vim-tiny
+	ed
+)
+
+# for user environments
+USER_PACKAGES=(
+	curl
+	sway
+	foot
+	wofi
+	grim
+	slurp
+	wl-clipboard
+	swayidle
+	swaylock
+	wlsunset
+	brightnessctl
+	pipewire
+	pavucontrol
+	alsa-utils
+	pipewire-alsa
 )
 
 ################
@@ -61,7 +80,8 @@ EFI_PART=""
 HOME_PART=""
 SWAP_PART=""
 HOSTNAME="mazadeb"
-while getopts "r:e:h:s:d:n:" opt; do
+TINY=false
+while getopts "r:e:h:s:d:n:t" opt; do
 	case ${opt} in
 		r) ROOT_PART="$OPTARG" ;;
 		e) EFI_PART="$OPTARG" ;;
@@ -69,16 +89,17 @@ while getopts "r:e:h:s:d:n:" opt; do
 		s) SWAP_PART="$OPTARG" ;;
 		d) TARGET_DIR="$OPTARG" ;;
 		n) HOSTNAME="$OPTARG" ;;
+		t) TINY=true ;;
 		?)
 			echo "[FATAL] Invalid options" >&2
-			echo "[FATAL] Usage: mazadebootstrap -r <root_part> [-e <efi_part>] [-h <home_part>] [-s <swap_part>] [-d <target_dir>] [-n <hostname>]" >&2
+			echo "[FATAL] Usage: mazadebootstrap -r <rootpart> [-e <efipart>] [-h <homepart>] [-s <swappart>] [-d <targetdir>] [-n <hostname>] [-t (disable user software)]" >&2
 			exit 1
 			;;
 	esac
 done
 if [ -z "$ROOT_PART" ]; then
 	echo "[FATAL] Root partition required" >&2
-	echo "[FATAL] Usage: mazadebootstrap -r <root_part> [-e <efi_part>] [-h <home_part>] [-s <swap_part>] [-d <target_dir>] [-n <hostname>]" >&2
+	echo "[FATAL] Usage: mazadebootstrap -r <rootpart> [-e <efipart>] [-h <homepart>] [-s <swappart>] [-d <targetdir>] [-n <hostname>] [-t (disable user software)]" >&2
 	exit 1
 elif [ ! -b "$ROOT_PART" ]; then
 	echo "[FATAL] Root partition '$ROOT_PART' is not a block device"
@@ -128,6 +149,9 @@ fi
 shopt -u dotglob
 
 # run debootstrap
+if ! $TINY; then
+	PACKAGES+=("${USER_PACKAGES[@]}")
+fi
 IFS=","
 PKG_LIST="${PACKAGES[*]}"
 unset IFS
