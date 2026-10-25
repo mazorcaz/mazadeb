@@ -230,6 +230,7 @@ apt install -y \
 # install grub
 echo "[INFO] Installing grub..."
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=$HOSTNAME --removable --recheck
+update-grub
 
 # configure system
 echo "[INFO] Configuring system..."
