@@ -1,0 +1,13 @@
+mazadeb
+=======
+
+Mazadeb is a simple Debian configuration created by
+mazorcaz. It is configured for how mazorcaz likes
+their system to be.
+
+installing
+==========
+
+To install mazadeb, use the mazadebootstrap script.
+This will install mazadeb from an existing Debian
+system.
