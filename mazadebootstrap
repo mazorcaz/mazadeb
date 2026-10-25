@@ -7,7 +7,6 @@ PACKAGES=(systemd-sysv
 	e2fsprogs
 	iproute2
 	iputils-ping
-	passwd
 	curl
 	vim-tiny
 	ed
@@ -219,11 +218,12 @@ cp -L /etc/resolv.conf "$TARGET_DIR/etc"
 echo "[INFO] Chrooting..."
 chroot "$TARGET_DIR" /bin/bash <<EOF
 export DEBIAN_FRONTEND=noninteractive
-echo "root:password" | /usr/sbin/chpassword
+echo "root:password" | /usr/sbin/chpasswd
 chage -d 0 root
 
 # install things
 echo "[INFO] Installing kernel, firmware, and bootloader..."
+apt update
 apt install -y \
 	firmware-iwlwifi \
 	firmware-realtek \
