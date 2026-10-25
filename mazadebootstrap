@@ -197,6 +197,12 @@ AddressRandomization=network
 AddressRandomizationRange=full
 EOF
 
+echo "[INFO] Copying mazadebootstrap to /usr/local/bin..."
+
+mkdir -p "$TARGET_DIR/usr/local/bin"
+cp "${BASH_SOURCE[0]}" "$TARGET_DIR/usr/local/bin/mazadebootstrap"
+chmod +x "$TARGET_DIR/usr/local/bin/mazadebootstrap"
+
 ##########
 # chroot #
 ##########
