@@ -285,6 +285,7 @@ fi
 # install grub
 echo "[INFO] Installing grub..."
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=$HOSTNAME --removable --recheck
+sed -i '/GRUB_CMDLINE_LINUX_DEFAULT/s/".*/""/' /etc/default/grub
 update-grub
 
 # configure system
