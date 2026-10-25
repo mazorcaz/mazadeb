@@ -6,6 +6,7 @@ VERSION=1.0
 PACKAGES=(
 	systemd-sysv
 	e2fsprogs
+	dosfstools
 	iproute2
 	iputils-ping
 	sudo
