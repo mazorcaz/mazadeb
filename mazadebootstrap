@@ -195,6 +195,12 @@ if [ -n "$SWAP_PART" ]; then
 	echo "UUID=$SWAP_UUID none swap sw 0 0" >> "$TARGET_DIR/etc/fstab"
 fi
 
+echo "[INFO] Generating /etc/environment..."
+
+cat <<EOF >> "$TARGET_DIR/etc/environment"
+LIBSEAT_BACKEND=logind
+EOF
+
 echo "[INFO] Configuring systemd-networkd..."
 
 mkdir -p "$TARGET_DIR/etc/systemd/network/"
@@ -275,6 +281,7 @@ apt install -y \
 	firmware-atheros \
 	firmware-brcm80211 \
 	firmware-mediatek \
+	firmware-misc-nonfree \
 	linux-image-amd64 \
 	grub-efi-amd64
 
