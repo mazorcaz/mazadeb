@@ -71,14 +71,14 @@ while getopts "r:e:h:s:d:n:" opt; do
 		n) HOSTNAME="$OPTARG" ;;
 		?)
 			echo "[FATAL] Invalid options" >&2
-			echo "[FATAL] Usage: $0 -r <root_part> [-e <efi_part>] [-h <home_part>] [-s <swap_part>] [-d <target_dir>] [-n <hostname>]" >&2
+			echo "[FATAL] Usage: mazadebootstrap -r <root_part> [-e <efi_part>] [-h <home_part>] [-s <swap_part>] [-d <target_dir>] [-n <hostname>]" >&2
 			exit 1
 			;;
 	esac
 done
 if [ -z "$ROOT_PART" ]; then
 	echo "[FATAL] Root partition required" >&2
-	echo "[FATAL] Usage: $0 -r <root_part> [-e <efi_part>] [-h <home_part>] [-s <swap_part>] [-d <target_dir>] [-n <hostname>]" >&2
+	echo "[FATAL] Usage: mazadebootstrap -r <root_part> [-e <efi_part>] [-h <home_part>] [-s <swap_part>] [-d <target_dir>] [-n <hostname>]" >&2
 	exit 1
 elif [ ! -b "$ROOT_PART" ]; then
 	echo "[FATAL] Root partition '$ROOT_PART' is not a block device"
