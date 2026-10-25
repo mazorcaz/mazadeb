@@ -2,6 +2,22 @@
 # mazadebootstrap
 VERSION=1.0
 
+PACKAGES=(systemd-sysv
+	iproute2
+	iputils-ping
+	curl
+	vim-tiny
+	sudo
+	systemd-resolved
+	iwd
+	debootstrap
+	ssh
+	dbus
+)
+IFS=","
+PKG_LIST="${PACKAGES[*]}"
+unset IFS
+
 ################
 # script setup #
 ################
@@ -117,7 +133,7 @@ debootstrap \
 	--arch=amd64 \
 	--variant=minbase \
 	--components=main,contrib,non-free,non-free-firmware \
-	--include=systemd-sysv,iproute2,iputils-ping,vim-tiny,sudo,systemd-resolved,iwd \
+	--include="$PKG_LIST" \
 	"stable" \
 	"$TARGET_DIR" \
 	"https://deb.debian.org/debian"
