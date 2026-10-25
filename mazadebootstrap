@@ -35,6 +35,8 @@ USER_PACKAGES=(
 	pavucontrol
 	alsa-utils
 	pipewire-alsa
+	xdg-desktop-portal
+	xdg-desktop-portal-wlr
 )
 
 ################
@@ -149,9 +151,6 @@ fi
 shopt -u dotglob
 
 # run debootstrap
-if ! $TINY; then
-	PACKAGES+=("${USER_PACKAGES[@]}")
-fi
 IFS=","
 PKG_LIST="${PACKAGES[*]}"
 unset IFS
@@ -256,6 +255,10 @@ apt install -y \
 	firmware-mediatek \
 	linux-image-amd64 \
 	grub-efi-amd64
+
+if ! $TINY; then
+	apt install -y ${USER_PACKAGES[@]}
+fi
 
 # install grub
 echo "[INFO] Installing grub..."
