@@ -159,6 +159,7 @@ unset IFS
 echo "[INFO] Runnning debootstrap..."
 debootstrap \
 	--arch=amd64 \
+	--variant=minbase \
 	--components=main,contrib,non-free,non-free-firmware \
 	--include="$PKG_LIST" \
 	"stable" \
