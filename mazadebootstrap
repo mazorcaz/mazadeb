@@ -1,12 +1,13 @@
 #!/bin/sh
 # mazadebootstrap
-VERSION=1.2.2
+VERSION=1.2.3
 
 # essential packages
 PACKAGES="\
 	systemd-sysv \
 	e2fsprogs \
 	dosfstools \
+	iproute2 \
 	iputils-ping \
 	sudo \
 	dbus \
