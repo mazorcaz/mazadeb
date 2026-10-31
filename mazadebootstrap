@@ -86,9 +86,10 @@ for arg in "$@"; do
 	if [[ "$arg" == "-u" ]]; then
 		echo "[INFO] Updating mazadeboostrap..."
 
-		# local to prevent set -e from failing the script
-		local CURLRES=$(curl -s --fail-with-body https://raw.githubusercontent.com/mazorcaz/mazadeb/main/mazadebootstrap)
+		set +e
+		CURLRES=$(curl -s --fail-with-body https://raw.githubusercontent.com/mazorcaz/mazadeb/main/mazadebootstrap)
 		CURLEXIT=$?
+		set -e
 
 		if [ $CURLEXIT -ne 0 ]; then
 			echo "[ERROR] Failed to fetch script: $CURLRES"
