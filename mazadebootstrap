@@ -1,6 +1,6 @@
 #!/bin/sh
 # mazadebootstrap
-VERSION=1.2.5
+VERSION=1.2.6
 
 # essential packages
 PACKAGES="\
@@ -20,6 +20,7 @@ PACKAGES="\
 	parted \
 	debootstrap \
 	curl \
+	less \
 "
 
 # for user environments
