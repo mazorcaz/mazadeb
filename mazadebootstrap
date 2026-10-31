@@ -9,6 +9,7 @@ PACKAGES="\
 	dosfstools \
 	iputils-ping \
 	sudo \
+	dbus \
 	systemd-resolved \
 	iwd \
 	ssh \
@@ -22,7 +23,6 @@ PACKAGES="\
 
 # for user environments
 USER_PACKAGES="\
-	dbus \
 	sway \
 	foot \
 	wofi \
