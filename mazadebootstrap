@@ -1,6 +1,6 @@
 #!/bin/sh
 # mazadebootstrap
-VERSION=1.2.3
+VERSION=1.2.4
 
 # essential packages
 PACKAGES="\
@@ -39,6 +39,7 @@ USER_PACKAGES="\
 	pavucontrol \
 	xdg-desktop-portal \
 	xdg-desktop-portal-wlr \
+	firmware-linux-nonfree \
 "
 
 ################
