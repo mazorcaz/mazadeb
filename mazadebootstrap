@@ -1,6 +1,6 @@
 #!/bin/bash
 # mazadebootstrap
-VERSION=1.0
+VERSION=1.1
 
 # essential packages
 PACKAGES=(
@@ -12,13 +12,14 @@ PACKAGES=(
 	sudo
 	systemd-resolved
 	iwd
-	debootstrap
 	ssh
 	dbus
 	vim-tiny
 	ed
 	locales
 	parted
+	debootstrap
+	curl
 )
 
 # for user environments
@@ -64,7 +65,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # check required tools
-REQUIRED_TOOLS=("debootstrap" "chroot" "mount" "umount")
+REQUIRED_TOOLS=("debootstrap" "chroot" "mount" "umount" "curl")
 MISSING_TOOLS=()
 for tool in "${REQUIRED_TOOLS[@]}"; do
 	if ! command -v "$tool" &> /dev/null; then
@@ -77,7 +78,44 @@ if [ ${#MISSING_TOOLS[@]} -ne 0 ]; then
 	exit 1
 fi
 
-# parse args
+##########
+# update #
+##########
+
+for arg in "$@"; do
+	if [[ "$arg" == "-u" ]]; then
+		echo "[INFO] Updating mazadeboostrap..."
+
+		CURLRES=$(curl -s --fail-with-body https://raw.githubusercontent.com/mazorcaz/mazadeb/main/mazadebootstrap)
+		CURLEXIT=$?
+
+		if [ $CURLEXIT -ne 0 ]; then
+			echo "[ERROR] Failed to fetch script: $CURLRES"
+		else
+			NEWVERSION=$(echo "$CURLRES" | grep -E '^VERSION=' | sed 's/VERSION=//')
+			echo "[INFO] New version is $NEWVERSION"
+
+			NEWARGS=()
+			for arg in "$@"; do
+				[[ "$arg" != "-u" ]] && NEWARGS+=("$arg")
+			done
+
+			echo "[INFO] Saving script..."
+
+			echo "$CURLRES" > "$0.tmp"
+			mv "$0.tmp" "$0"
+			chmod +x "$0"
+		
+			echo "[INFO] Relaunching new script version..."
+			exec bash "$0" "${NEWARGS[@]}"
+		fi
+	fi
+done
+
+##############
+# parse args #
+##############
+
 HELP="Options:
 	-r <root>: (required) set root partition
 	-e <efi>: set EFI partition
@@ -86,7 +124,8 @@ HELP="Options:
 	-d <targetdir>: set target mount point (default /mnt/mazadeb)
 	-n <hostname>: set hostname (default mazadeb)
 	-v <version>: set debian version (default stable)
-	-t: tiny mode-- no user packages"
+	-t: tiny mode: no user packages
+	-u: update: download the newest mazadebootstrap first"
 TARGET_DIR="/mnt/mazadeb"
 ROOT_PART=""
 EFI_PART=""
@@ -95,7 +134,7 @@ SWAP_PART=""
 HOSTNAME="mazadeb"
 DEBVERSION="stable"
 TINY=false
-while getopts "r:e:h:s:d:n:v:t" opt; do
+while getopts "r:e:h:s:d:n:v:tu" opt; do
 	case ${opt} in
 		r) ROOT_PART="$OPTARG" ;;
 		e) EFI_PART="$OPTARG" ;;
@@ -105,6 +144,7 @@ while getopts "r:e:h:s:d:n:v:t" opt; do
 		n) HOSTNAME="$OPTARG" ;;
 		v) DEBVERSION="$OPTARG" ;;
 		t) TINY=true ;;
+		u) UPDATE=true ;;
 		?)
 			echo "[FATAL] Invalid options" >&2
 			echo "$HELP"
@@ -112,6 +152,7 @@ while getopts "r:e:h:s:d:n:v:t" opt; do
 			;;
 	esac
 done
+
 if [ -z "$ROOT_PART" ]; then
 	echo "[FATAL] Root partition required" >&2
 	echo "$HELP"
