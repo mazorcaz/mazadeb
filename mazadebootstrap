@@ -1,19 +1,17 @@
 #!/bin/sh
 # mazadebootstrap
-VERSION=1.2.0
+VERSION=1.2.1
 
 # essential packages
 PACKAGES="\
 	systemd-sysv \
 	e2fsprogs \
 	dosfstools \
-	iproute2 \
 	iputils-ping \
 	sudo \
 	systemd-resolved \
 	iwd \
 	ssh \
-	dbus \
 	vim-tiny \
 	ed \
 	locales \
@@ -24,6 +22,7 @@ PACKAGES="\
 
 # for user environments
 USER_PACKAGES="\
+	dbus \
 	sway \
 	foot \
 	wofi \
