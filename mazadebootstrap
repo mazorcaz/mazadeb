@@ -41,9 +41,9 @@ USER_PACKAGES="\
 	xdg-desktop-portal \
 	xdg-desktop-portal-wlr \
 	firmware-linux-nonfree \
-	manpages
-	manpages-dev
-	man-db
+	manpages \
+	manpages-dev \
+	man-db \
 "
 
 ################
