@@ -69,7 +69,7 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 # check required tools
-REQUIRED_TOOLS="debootstrap chroot mount umount curl printf ed"
+REQUIRED_TOOLS="debootstrap chroot mount umount curl printf ed blkid sed grep tr id chage"
 MISSING_TOOLS=""
 for tool in $REQUIRED_TOOLS; do
 	if ! command -v "$tool" 2>&1 > /dev/null; then
