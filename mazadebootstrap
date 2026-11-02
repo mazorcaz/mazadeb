@@ -363,7 +363,9 @@ fi
 echo "[INFO] Installing grub..."
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=$HOSTNAME --removable --recheck
 sed -i '/GRUB_CMDLINE_LINUX_DEFAULT/s/".*/""/' /etc/default/grub
+if [ -n "$SWAP_PART" ]; then sed -i "/GRUB_CMDLINE_LINUX_DEFAULT/s/\".*/\"resume=UUID=$SWAP_UUID\"/" /etc/default/grub; fi
 update-grub
+update-initramfs -u -k all
 
 # configure system
 echo "[INFO] Configuring system..."
